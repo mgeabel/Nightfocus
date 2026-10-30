@@ -1,7 +1,11 @@
 # Nightfocus
-still in early development.
+Still in early development.
 
-for now, it is a frontend website that display a timer that can be toggled on/off and reset button. New features will be added gradully. I make an algorithm for star lights and with glowing effects, the alorithm I am thinking of building is where stars shine up in a pattern where they can shape galaxies. on later stages, other features such as account center, datasets, and other stuff will be considered as well. 
+For now, the website is a frontend project featuring a timer that can be toggled on and off, along with a reset button. More features will be added gradually as development progresses.
 
+I'm also working on a star-light algorithm with glowing effects. The idea is to have stars light up in different patterns, eventually forming shapes resembling galaxies.
 
-for now the website is deployed at Vercel: https://nightfocus-rikicfadw-kiri-8b1f.vercel.app/
+In later stages, I may explore adding features such as an account center, datasets, and other functionality.
+
+The website is currently deployed on Vercel:
+https://nightfocus-rikicfadw-kiri-8b1f.vercel.app/
