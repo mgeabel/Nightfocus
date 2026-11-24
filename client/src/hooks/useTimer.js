@@ -26,6 +26,13 @@ export function useTimer({ mode, durationMs }) {
 
   function start() {
     if (status === "running" || status === "finished") return;
+
+    if (mode === "down" && elapsedBeforeRef.current >= durationMs) {
+      setElapsedMs(durationMs);
+      setStatus("finished");
+      return;
+    }
+
     startedAtRef.current = Date.now();
     setStatus("running");
   }

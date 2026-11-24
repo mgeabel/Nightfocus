@@ -3,6 +3,8 @@ import { useTimer } from "./hooks/useTimer";
 import { formatTime } from "./utils/formatTime";
 import ModeWheel from "./components/ModeWheel";
 import TimeRotor from "./components/TimeRotor";
+import { useBackground } from "./hooks/useBackground";
+import BackgroundPicker from "./components/BackgroundPicker";
 
 function App() {
   const [mode, setMode] = useState("down");
@@ -12,32 +14,55 @@ function App() {
   const isRunning = timer.status === "running";
   const showRotor = mode === "down" && timer.status === "idle";
   const modeLocked = timer.status === "running" || timer.status === "finished";
+  const [picking, setPicking] = useState(false);
+  const bg = useBackground();
+
+  function handleStageClick(e) {
+    if (e.target === e.currentTarget) setPicking(true);
+  }
 
   return (
-    <main className="timer">
-      <div className={`timer-row ${showRotor ? "" : "lowered"}`}>
-        <ModeWheel mode={mode} onModeChange={setMode} disabled={modeLocked} />
-        <h1 id="display">{formatTime(timer.displaySeconds)}</h1>
+    <div className={`app ${picking ? "is-picking" : ""}`}>
+      <div
+        className="stage"
+        style={{ backgroundImage: `url(${bg.background.src})` }}
+        onClick={handleStageClick}
+      >
+        <main className="timer">
+          <div className={`timer-row ${showRotor ? "" : "lowered"}`}>
+            <ModeWheel mode={mode} onModeChange={setMode} disabled={modeLocked} />
+            <h1 id="display">{formatTime(timer.displaySeconds)}</h1>
+          </div>
+
+          <div className="rotor-slot">
+            <TimeRotor
+              minutes={minutes}
+              onMinutesChange={setMinutes}
+              visible={showRotor}
+            />
+          </div>
+
+          <div className="controls">
+            <button
+              onClick={isRunning ? timer.pause : timer.start}
+              disabled={timer.status === "finished"}
+            >
+              {isRunning ? "Pause" : "Start"}
+            </button>
+            <button onClick={timer.reset}>Reset</button>
+          </div>
+        </main>
       </div>
 
-      <div className="rotor-slot">
-        <TimeRotor
-          minutes={minutes}
-          onMinutesChange={setMinutes}
-          visible={showRotor}
+      {picking && (
+        <BackgroundPicker
+          onPrev={bg.prev}
+          onNext={bg.next}
+          onClose={() => setPicking(false)}
+          canSwitch={bg.count > 1}
         />
-      </div>
-
-      <div className="controls">
-        <button
-          onClick={isRunning ? timer.pause : timer.start}
-          disabled={timer.status === "finished"}
-        >
-          {isRunning ? "Pause" : "Start"}
-        </button>
-        <button onClick={timer.reset}>Reset</button>
-      </div>
-    </main>
+      )}
+    </div>
   );
 }
 

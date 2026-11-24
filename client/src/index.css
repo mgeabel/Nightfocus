@@ -8,17 +8,75 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
+  overflow: hidden;
+  background: var(--bg);
   color: var(--text);
   font-family: system-ui, sans-serif;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
   background-color: var(--bg);
-  background-image: url("./assets/backgrounds/default.png");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  transition: transform 0.35s ease, border-radius 0.35s ease, box-shadow 0.35s ease;
+}
+
+.is-picking .stage {
+  transform: scale(0.7);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.bg-picker {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  touch-action: none;
+  cursor: grab;
+}
+
+.bg-picker:active {
+  cursor: grabbing;
+}
+
+.bg-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  margin: 0;
+  padding: 0.2rem 0.8rem;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.bg-arrow:not(:disabled):hover {
+  background: transparent;
+  color: var(--theme);
+}
+
+.bg-arrow-left {
+  left: 3%;
+}
+
+.bg-arrow-right {
+  right: 3%;
+}
+
+.bg-picker-hint {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .timer {
