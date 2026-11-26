@@ -1,7 +1,8 @@
 import { useWheelPicker } from "../hooks/useWheelPicker";
+import { MAX_SESSION_MINUTES } from "../constants";
 
 const MIN = 5;
-const MAX = 180;
+const MAX = MAX_SESSION_MINUTES;
 const STEP = 5;
 const VALUES = Array.from({ length: (MAX - MIN) / STEP + 1 }, (_, i) => MIN + i * STEP);
 

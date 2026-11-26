@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { MAX_SESSION_MS } from "../constants";
 
 export function useTimer({ mode, durationMs }) {
   const [status, setStatus] = useState("idle");
@@ -7,14 +8,17 @@ export function useTimer({ mode, durationMs }) {
   const startedAtRef = useRef(null);
   const elapsedBeforeRef = useRef(0);
 
+  // Countdown stops at its duration, count-up stops at the 3-hour max.
+  const limitMs = mode === "down" ? durationMs : MAX_SESSION_MS;
+
   useEffect(() => {
     if (status !== "running") return;
 
     const id = setInterval(() => {
       const elapsed = elapsedBeforeRef.current + (Date.now() - startedAtRef.current);
 
-      if (mode === "down" && elapsed >= durationMs) {
-        setElapsedMs(durationMs);
+      if (elapsed >= limitMs) {
+        setElapsedMs(limitMs);
         setStatus("finished");
       } else {
         setElapsedMs(elapsed);
@@ -22,13 +26,13 @@ export function useTimer({ mode, durationMs }) {
     }, 250);
 
     return () => clearInterval(id);
-  }, [status, mode, durationMs]);
+  }, [status, limitMs]);
 
   function start() {
     if (status === "running" || status === "finished") return;
 
-    if (mode === "down" && elapsedBeforeRef.current >= durationMs) {
-      setElapsedMs(durationMs);
+    if (elapsedBeforeRef.current >= limitMs) {
+      setElapsedMs(limitMs);
       setStatus("finished");
       return;
     }
@@ -56,5 +60,5 @@ export function useTimer({ mode, durationMs }) {
       ? Math.ceil(Math.max(durationMs - elapsedMs, 0) / 1000)
       : Math.floor(elapsedMs / 1000);
 
-  return { status, displaySeconds, start, pause, reset };
+  return { status, elapsedMs, displaySeconds, start, pause, reset };
 }
